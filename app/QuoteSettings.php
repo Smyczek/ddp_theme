@@ -17,9 +17,64 @@ class QuoteSettings
      */
     public function __construct() 
     {
+        add_action('init', [$this, 'quote_custom_post_type'], 0);
         add_action('admin_menu', [$this, 'ddp_add_quote_settings_page']);
         add_action('admin_init', [$this, 'ddp_quote_settings_init']);
         add_shortcode('ddp_quote_link', [$this, 'ddp_quote_link_shortcode']);
+    }
+
+    // Register Custom Post Type
+    public function quote_custom_post_type() {
+
+        $labels = array(
+            'name'                  => _x( 'Quotes', 'Quotes Type Name', 'sage' ),
+            'singular_name'         => _x( 'Quote', 'Quote Type Singular Name', 'sage' ),
+            'menu_name'             => __( 'Clients Quotes', 'sage' ),
+            'name_admin_bar'        => __( 'Quote Type', 'sage' ),
+            'archives'              => __( 'Item Archives', 'sage' ),
+            'attributes'            => __( 'Item Attributes', 'sage' ),
+            'parent_item_colon'     => __( 'Parent Item:', 'sage' ),
+            'all_items'             => __( 'All Items', 'sage' ),
+            'add_new_item'          => __( 'Add New Item', 'sage' ),
+            'add_new'               => __( 'Add New', 'sage' ),
+            'new_item'              => __( 'New Item', 'sage' ),
+            'edit_item'             => __( 'Edit Item', 'sage' ),
+            'update_item'           => __( 'Update Item', 'sage' ),
+            'view_item'             => __( 'View Item', 'sage' ),
+            'view_items'            => __( 'View Items', 'sage' ),
+            'search_items'          => __( 'Search Item', 'sage' ),
+            'not_found'             => __( 'Not found', 'sage' ),
+            'not_found_in_trash'    => __( 'Not found in Trash', 'sage' ),
+            'featured_image'        => __( 'Featured Image', 'sage' ),
+            'set_featured_image'    => __( 'Set featured image', 'sage' ),
+            'remove_featured_image' => __( 'Remove featured image', 'sage' ),
+            'use_featured_image'    => __( 'Use as featured image', 'sage' ),
+            'insert_into_item'      => __( 'Insert into item', 'sage' ),
+            'uploaded_to_this_item' => __( 'Uploaded to this item', 'sage' ),
+            'items_list'            => __( 'Items list', 'sage' ),
+            'items_list_navigation' => __( 'Items list navigation', 'sage' ),
+            'filter_items_list'     => __( 'Filter items list', 'sage' ),
+        );
+        $args = array(
+            'label'                 => __( 'Quote', 'sage' ),
+            'description'           => __( 'Client Quotes', 'sage' ),
+            'labels'                => $labels,
+            'supports'              => array( 'title', 'custom-fields' ),
+            'hierarchical'          => false,
+            'public'                => false,
+            'show_ui'               => true,
+            'show_in_menu'          => true,
+            'menu_position'         => 25,
+            'menu_icon'             => 'dashicons-email-alt',
+            'show_in_admin_bar'     => false,
+            'show_in_nav_menus'     => true,
+            'can_export'            => true,
+            'has_archive'           => false,
+            'exclude_from_search'   => true,
+            'publicly_queryable'    => false,
+            'capability_type'       => 'page',
+        );
+        register_post_type( 'clients_quotes', $args );
     }
 
     /**
@@ -28,7 +83,7 @@ class QuoteSettings
      */
     public function ddp_add_quote_settings_page() {
         add_submenu_page(
-            'edit.php?post_type=quote', // Parent menu (Quotes custom post type)
+            'edit.php?post_type=clients_quotes', // Parent menu (Quotes custom post type)
             'Quote Settings',
             'Settings',
             'manage_options',
@@ -41,8 +96,8 @@ class QuoteSettings
     public function ddp_quote_options_page_callback() {
         echo '<div class="wrap">';
         echo '<form method="post" action="options.php">';
-        settings_fields('general'); 
-        do_settings_sections('general'); 
+        settings_fields('client_quotes'); 
+        do_settings_sections('client_quotes'); 
         submit_button();
         echo '</form>';
         echo '</div>';
@@ -53,14 +108,14 @@ class QuoteSettings
             'ddp_quote_options_section',
             'Quote Settings',
             [$this, 'ddp_quote_options_section_callback'],
-            'general'
+            'client_quotes'
         );
 
         add_settings_field(
             'ddp_quote_email_option',
             'Email to send Quotes',
             [$this, 'ddp_quote_email_option_callback'],
-            'general',
+            'client_quotes',
             'ddp_quote_options_section'
         );
 
@@ -68,7 +123,7 @@ class QuoteSettings
             'ddp_quote_email_content_option',
             'Email Content',
             [$this, 'ddp_quote_email_content_option_callback'],
-            'general',
+            'client_quotes',
             'ddp_quote_options_section'
         );
 
@@ -76,13 +131,13 @@ class QuoteSettings
             'ddp_quote_select_type_option',
             'Quote Form Type of Photography',
             [$this, 'ddp_quote_select_type_option_callback'],
-            'general',
+            'client_quotes',
             'ddp_quote_options_section'
         );
 
-        register_setting('general', 'ddp_quote_email_option');
-        register_setting('general', 'ddp_quote_email_content_option');
-        register_setting('general', 'ddp_quote_select_type_option');
+        register_setting('client_quotes', 'ddp_quote_email_option');
+        register_setting('client_quotes', 'ddp_quote_email_content_option');
+        register_setting('client_quotes', 'ddp_quote_select_type_option');
     }
 
     // Callback function to render the section

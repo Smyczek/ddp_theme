@@ -16,7 +16,12 @@
 </x-alert>
 @endif
 
-  <form id="quote-form" action="{!! admin_url('admin-post.php') !!}" method="post" data-te-validation-init data-te-active-validation="true" autocomplete="off">
+  <form id="quote-form" 
+    action="{!! admin_url('admin-post.php') !!}" 
+    method="post" 
+    data-te-validation-init 
+    data-te-active-validation="true" 
+    autocomplete="off">
 
     <div class="grid lg:grid-cols-2 gap-4 mb-4">
 

@@ -83,9 +83,9 @@ function process_quote_form(){
         if (empty($errors)) {
             // All fields are valid, proceed with processing the form data
             $new_quote = array(
-                'post_title'   => 'Quote: ' . current_datetime()->format('Y-m-d H:i:s'),
+                'post_title'   => 'Quote: ' . esc_html(current_datetime()->format('Y-m-d H:i:s')),
                 'post_content' => $content,
-                'post_type'    => 'quote', // Replace 'quote' with your custom post type name
+                'post_type'    => 'clients_quotes', // Replace 'quote' with your custom post type name
                 'post_status'  => 'publish', // You can set it to 'draft' if you want to save as a draft initially
             );
 
